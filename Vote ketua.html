@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemilihan Ketua</title>
+    <style>
+        body {
+            margin-bottom: 50px;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            padding-left: 60px;
+            padding-right: 60px;
+            position: relative;
+        }
+
+        video {
+            position: absolute;
+            background-size: cover;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        img {
+            width: 60px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 25px;
+            background-image: linear-gradient(to right, rgb(176, 248, 151), yellow, rgb(0, 151, 0));
+            -webkit-background-clip: text;
+            color: transparent;
+            font-family:Verdana, Geneva, Tahoma, sans-serif;
+            -webkit-text-stroke: 1.2px black;
+            text-shadow: 2px 4px 20px rgb(218, 32, 32);
+        }
+        .ytta {
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid sandybrown;
+            backdrop-filter: blur(5px);
+            box-shadow: 1px 0px 20px salmon;
+            text-align: center;
+            background-color: rgba(139, 69, 19, 0.441);
+            border-radius: 10%;
+        }
+
+        .candidate {
+            margin-bottom: 10px;
+        }
+
+        input {
+            font-weight: 700;
+            font-size: 30px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            backdrop-filter: blur(5px);
+            box-shadow: 1px 0px 20px salmon;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        button {
+            color: aqua;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: 700;
+            border-radius: 10px;
+            background-color: black;
+            margin-top: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: translateY(-4px);
+            color:rgb(218, 32, 32);
+            box-shadow: 2px 4px 30px blue;
+            transition: 0.3s ease-in-out;
+        }
+
+        #result {
+            text-shadow: 2px 3px 5px chartreuse;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .candidate-container {
+            margin-bottom: 20px;
+        }
+
+        .vote-btn {
+            margin-left: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .vote-btn:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</head>
+<body>
+    <video src="awan.mp4" autoplay muted loop></video>
+
+    <div class="container">
+        <div class="ytta">
+            <h2>Voting Ketua dan Wakil</h2>
+            <img src="pikr.png">
+        </div>
+        <div id="candidates" class="candidate">
+            <input type="text" id="candidate1" name="candidate1" placeholder="Nama Calon" />
+            <button onclick="addCandidate()">Tambah Calon</button>
+        </div>
+        <div id="candidate-list"></div>
+
+        <button id="riset" onclick="resetVotes()">Reset Suara</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        var votes = {};
+        var candidates = [];
+
+        function addCandidate() {
+            var candidateName = document.getElementById('candidate1').value.trim();
+            if (candidateName && !candidates.includes(candidateName)) {
+                candidates.push(candidateName);
+                votes[candidateName] = 0;
+                displayCandidates();
+            }
+            document.getElementById('candidate1').value = ''; // Clear input field
+        }
+
+        function vote(candidateName) {
+            votes[candidateName]++;
+            displayResult();
+        }
+
+        function resetVotes() {
+            // Clear both the candidates and votes
+            votes = {};
+            candidates = [];
+            displayCandidates(); // Clear the list of candidates
+            displayResult(); // Clear the results
+        }
+
+        function displayCandidates() {
+            var candidateListContainer = document.getElementById('candidate-list');
+            candidateListContainer.innerHTML = ''; // Clear previous list
+            candidates.forEach(function(candidate) {
+                var candidateContainer = document.createElement('div');
+                candidateContainer.classList.add('candidate-container');
+                candidateContainer.innerHTML = `
+                    <span>${candidate}</span>
+                    <button class="vote-btn" onclick="vote('${candidate}')">Vote</button>
+                `;
+                candidateListContainer.appendChild(candidateContainer);
+            });
+        }
+
+        function displayResult() {
+            var resultContainer = document.getElementById('result');
+            resultContainer.innerHTML = '';
+            for (var candidate in votes) {
+                resultContainer.innerHTML += candidate + ': ' + votes[candidate] + ' suara<br>';
+            }
+        }
+
+        document.getElementById('candidate1').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                addCandidate();
+            }
+        });
+    </script>
+</body>
+</html>
+
